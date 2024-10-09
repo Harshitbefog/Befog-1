@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 import React, { useMemo } from 'react';
 
 const Background = React.memo(() => {
-  // Example of using useMemo if you have derived values
   const starLayers = useMemo(() => {
     return (
       <>
@@ -12,7 +11,7 @@ const Background = React.memo(() => {
         {/* Add more layers if needed */}
       </>
     );
-  }, []); // Empty dependency array ensures it only runs once
+  }, []);
 
   return (
     <div className="bg fixed min-h-screen">
@@ -22,5 +21,8 @@ const Background = React.memo(() => {
     </div>
   );
 });
+
+// Add display name for the component
+Background.displayName = "Background";
 
 export default Background;
