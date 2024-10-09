@@ -14,6 +14,7 @@ const Navbar = () => {
   const dropdownRef = useRef(); // Ref to track dropdown
 
   useEffect(() => {
+    // Fetch countries from API
     const fetchCountries = async () => {
       const headers = {
         "X-CSCAPI-KEY": "RENsbnBxc3FHNGIxSG85ZlpnY3NLNFpFdTUzVW91WVA1QjdFUzlNeA==",
@@ -23,9 +24,16 @@ const Navbar = () => {
         const response = await axios.get("https://api.countrystatecity.in/v1/countries", { headers });
         setCountries(response.data);
 
-        // Find and set default country to India
+        // Check localStorage for selected country
+        const storedCountry = localStorage.getItem("selectedCountry");
         const india = response.data.find(country => country.name === "India");
-        setSelectedCountry(india || response.data[0]); // Fallback to the first country if India isn't found
+
+        if (storedCountry) {
+          const countryFromStorage = response.data.find(country => country.name === storedCountry);
+          setSelectedCountry(countryFromStorage || india); // Set stored country or default to India
+        } else {
+          setSelectedCountry(india); // Fallback to the first country if no stored country
+        }
       } catch (error) {
         console.log("error", error);
       }
@@ -42,11 +50,12 @@ const Navbar = () => {
   ];
 
   const handleToggle = () => {
-    setToggle((prev) => !prev);
+    setToggle(prev => !prev);
   };
 
   const handleSelectCountry = (country) => {
     setSelectedCountry(country);
+    localStorage.setItem("selectedCountry", country.name); // Store selected country in localStorage
     setToggle(false); // Close the dropdown after selection
   };
 
